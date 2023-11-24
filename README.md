@@ -1,2 +1,2 @@
 # Line-maze-solving-robot.
-This robot finds the shortest path to the destination using left hand rule.
+This is a line following robot that solves the maze and find the shortest path.
