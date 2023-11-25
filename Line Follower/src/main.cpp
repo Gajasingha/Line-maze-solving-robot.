@@ -1,6 +1,5 @@
-#include <Arduino.h>
+#include <Arduino.h>            //USED LIBRARIES
 #include<QTRSensors.h>
-
 #include<Wire.h>                                                        
 #include<Adafruit_SSD1306.h>
 #include<Adafruit_GFX.h>
@@ -18,10 +17,10 @@ unsigned int i=0;
 
 String path;
 
-enum junctionType { DeadEnd, CrossJunction, TJunction, LeftTJunction, LeftJunction, RightTJunction, RightJunction, Destination};
+enum junctionType { DeadEnd, CrossJunction, TJunction, LeftTJunction, LeftJunction, RightTJunction, RightJunction, Destination};    //REQUIRED TO SWITCH STRING DATA TYPE
 junctionType direction;
 
-#define m1_in1 18
+#define m1_in1 18            //DEFINED MOTOR PINS
 #define m1_in2 5
 #define m2_in1 16
 #define m2_in2 17
@@ -38,7 +37,7 @@ junctionType direction;
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void mdrive(int m1_speed, int m2_speed){                                    //controlling motor speed and direction
+void mdrive(int m1_speed, int m2_speed){            //CONTROLLING SPEED AND DIRECTION OF MOTORS
 
     if(m1_speed>0){
         if(m1_speed>255){
@@ -73,7 +72,7 @@ void mdrive(int m1_speed, int m2_speed){                                    //co
 
 }
 
-void followLine(){                                                          //line following
+void followLine(){                                                          //LINE FOLLOWING 
     uint16_t position = qtr.readLineBlack(sensorValues);
     error = position-3500;
     motorSpeed = Kp * error + Kd * (error - lastError);
@@ -85,7 +84,7 @@ void followLine(){                                                          //li
     mdrive(left_speed,rightSpeed);
 }
 
-void front(){                                                               //LSBR
+void front(){                                                                               
     mdrive(128,128);
     delay(380);
     mdrive(-50,-50);
@@ -131,7 +130,7 @@ void halt(){
     delay(50);
 }
 
-void checkJunction(){
+void checkJunction(){            //THIS FUNCION GIVES THE TYPE OF THE JUNCTION
 
     qtr.read(sensorValues);
     if((sensorValues[0]<thrdshld)&&((sensorValues[3]<thrdshld)&&(sensorValues[4]<thrdshld))&&(sensorValues[6]<thrdshld)){
@@ -203,7 +202,7 @@ void checkJunction(){
 }
 
 
-void leftHandRule(){
+void leftHandRule(){                    //MOVE THE ROBOT ACCORDING TO THE JUNCION TYPE USING LEFT HAND RULE
 
     qtr.read(sensorValues);
 
@@ -269,7 +268,7 @@ void leftHandRule(){
 
 }
 
-String ShortPath(){
+String ShortPath(){                //FINDS THE SHORTEST PATH 
 
     path.replace("LBL", "S"); 
     path.replace("LBS", "R");
@@ -308,7 +307,7 @@ void turn(){
 
 }
 
-void followPath(){
+void followPath(){                    //FOLLOW THE SHORTED PATH
 
     qtr.read(sensorValues);
 
@@ -416,37 +415,4 @@ void loop(){
     }
 
 
-/*
-ShortPath();
-display.clearDisplay();
-display.display();
-display.setCursor(0,0);
-display.print(path);
-display.display();
-followPath();
-*/
-
-
-
-
-
-
-
-
-
- /*
-qtr.read(sensorValues);
-  for (uint8_t i = 0; i < SensorCount; i++)
-  {
-    Serial.print(sensorValues[i]);
-    Serial.print('\t');
-  }
-
-  delay(250);
-  Serial.println(" ");
-
-*/
-
-
 }
-
